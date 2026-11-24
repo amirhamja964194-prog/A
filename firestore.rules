@@ -1,0 +1,251 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email in ['mursalimmondal630@gmail.com', 'k40242412@gmail.com'] ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Validation Blueprints (Anti-Update-Gap)
+    function isValidAppSettings(data) {
+      return data.keys().hasAll([
+        'configVersion',
+        'updateTitle',
+        'updateNotes',
+        'appName',
+        'attributionText',
+        'welcomeTitle',
+        'welcomeSubtitle',
+        'dictionaryTitle',
+        'dictionarySubtitle',
+        'accentColor',
+        'pageBackground',
+        'fontScale',
+        'announcementBanner',
+        'maintenanceMode',
+        'maintenanceMessage',
+        'enableTeacher',
+        'enableLiveMode',
+        'enableDictionary',
+        'enableVoiceInput',
+        'enableVoiceOutput',
+        'enablePdfExport',
+        'enableCamera',
+        'defaultClass',
+        'defaultVoice',
+        'defaultLiveRole',
+        'temperature',
+        'conciseAnswers',
+        'customTeacherPrompt',
+        'customLivePrompt',
+        'samplePrompts',
+        'sampleWords',
+        'updatedAt',
+        'updatedByUid'
+      ]) &&
+      data.keys().hasOnly([
+        'configVersion',
+        'updateTitle',
+        'updateNotes',
+        'appName',
+        'attributionText',
+        'welcomeTitle',
+        'welcomeSubtitle',
+        'dictionaryTitle',
+        'dictionarySubtitle',
+        'accentColor',
+        'pageBackground',
+        'fontScale',
+        'announcementBanner',
+        'apkDownloadUrl',
+        'maintenanceMode',
+        'maintenanceMessage',
+        'enableTeacher',
+        'enableLiveMode',
+        'enableDictionary',
+        'enableVoiceInput',
+        'enableVoiceOutput',
+        'enablePdfExport',
+        'enableCamera',
+        'defaultClass',
+        'defaultVoice',
+        'defaultLiveRole',
+        'temperature',
+        'conciseAnswers',
+        'customTeacherPrompt',
+        'customLivePrompt',
+        'samplePrompts',
+        'sampleWords',
+        'updatedAt',
+        'updatedByUid'
+      ]) &&
+      data.configVersion is int && data.configVersion >= 1 && data.configVersion <= 1000000 &&
+      data.updateTitle is string && data.updateTitle.size() >= 1 && data.updateTitle.size() <= 80 &&
+      data.updateNotes is string && data.updateNotes.size() <= 600 &&
+      data.appName is string && data.appName.size() >= 1 && data.appName.size() <= 40 &&
+      data.attributionText is string && data.attributionText.size() >= 1 && data.attributionText.size() <= 50 &&
+      data.welcomeTitle is string && data.welcomeTitle.size() <= 100 &&
+      data.welcomeSubtitle is string && data.welcomeSubtitle.size() >= 1 && data.welcomeSubtitle.size() <= 280 &&
+      data.dictionaryTitle is string && data.dictionaryTitle.size() >= 1 && data.dictionaryTitle.size() <= 60 &&
+      data.dictionarySubtitle is string && data.dictionarySubtitle.size() >= 1 && data.dictionarySubtitle.size() <= 240 &&
+      data.accentColor in ['blue', 'emerald', 'indigo', 'violet', 'rose', 'amber'] &&
+      data.pageBackground in ['default', 'yellow', 'blue', 'emerald', 'rose', 'violet'] &&
+      data.fontScale in ['normal', 'large'] &&
+      data.announcementBanner is string && data.announcementBanner.size() <= 240 &&
+      (!('apkDownloadUrl' in data) || (data.apkDownloadUrl is string && data.apkDownloadUrl.size() <= 500 && (data.apkDownloadUrl == '' || data.apkDownloadUrl.matches('^https://.*')))) &&
+      data.maintenanceMode is bool &&
+      data.maintenanceMessage is string && data.maintenanceMessage.size() >= 1 && data.maintenanceMessage.size() <= 240 &&
+      data.enableTeacher is bool &&
+      data.enableLiveMode is bool &&
+      data.enableDictionary is bool &&
+      data.enableVoiceInput is bool &&
+      data.enableVoiceOutput is bool &&
+      data.enablePdfExport is bool &&
+      data.enableCamera is bool &&
+      data.defaultClass in ['Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'] &&
+      data.defaultVoice in ['Kore', 'Puck', 'Zephyr', 'Charon', 'Fenrir'] &&
+      data.defaultLiveRole in ['english', 'bengali', 'bilingual'] &&
+      (data.temperature is float || data.temperature is int) && data.temperature >= 0 && data.temperature <= 1 &&
+      data.conciseAnswers is bool &&
+      data.customTeacherPrompt is string && data.customTeacherPrompt.size() <= 600 &&
+      data.customLivePrompt is string && data.customLivePrompt.size() <= 600 &&
+      data.samplePrompts is list && data.samplePrompts.size() >= 1 && data.samplePrompts.size() <= 6 &&
+      data.samplePrompts[0] is string && data.samplePrompts[0].size() >= 1 && data.samplePrompts[0].size() <= 160 &&
+      data.sampleWords is list && data.sampleWords.size() >= 1 && data.sampleWords.size() <= 10 &&
+      data.sampleWords[0] is string && data.sampleWords[0].size() >= 1 && data.sampleWords[0].size() <= 60 &&
+      data.updatedAt is timestamp &&
+      data.updatedByUid is string && data.updatedByUid.size() >= 1 && data.updatedByUid.size() <= 128 &&
+      data.updatedByUid == request.auth.uid;
+    }
+
+    function isValidAdminUser(data, userId) {
+      return data.keys().hasAll(['uid', 'email', 'role', 'createdAt', 'updatedAt']) &&
+      data.keys().hasOnly(['uid', 'email', 'role', 'displayName', 'createdAt', 'updatedAt']) &&
+      data.uid is string && data.uid == userId && data.uid.size() >= 1 && data.uid.size() <= 128 &&
+      data.email is string && data.email.size() >= 3 && data.email.size() <= 254 &&
+      data.role in ['admin'] &&
+      (!('displayName' in data) || (data.displayName is string && data.displayName.size() <= 100)) &&
+      data.createdAt is timestamp &&
+      data.updatedAt is timestamp;
+    }
+
+    // Connection Validation Doc (startup connectivity check)
+    match /test/{testId} {
+      allow get: if isValidId(testId) && testId == 'connection';
+      allow list, create, update, delete: if false;
+    }
+
+    // Public Non-PII Live App Config & OTA Updates
+    match /appSettings/{settingId} {
+      allow get: if isValidId(settingId) && settingId == 'live';
+      allow list: if false;
+      allow create: if isVerifiedUser() &&
+        isValidId(settingId) &&
+        settingId == 'live' &&
+        isValidAppSettings(incoming()) &&
+        isAdmin() &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() &&
+        isValidId(settingId) &&
+        settingId == 'live' &&
+        isValidAppSettings(incoming()) &&
+        isAdmin() &&
+        incoming().updatedAt == request.time &&
+        incoming().configVersion >= existing().configVersion &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'configVersion',
+          'updateTitle',
+          'updateNotes',
+          'appName',
+          'attributionText',
+          'welcomeTitle',
+          'welcomeSubtitle',
+          'dictionaryTitle',
+          'dictionarySubtitle',
+          'accentColor',
+          'pageBackground',
+          'fontScale',
+          'announcementBanner',
+          'apkDownloadUrl',
+          'maintenanceMode',
+          'maintenanceMessage',
+          'enableTeacher',
+          'enableLiveMode',
+          'enableDictionary',
+          'enableVoiceInput',
+          'enableVoiceOutput',
+          'enablePdfExport',
+          'enableCamera',
+          'defaultClass',
+          'defaultVoice',
+          'defaultLiveRole',
+          'temperature',
+          'conciseAnswers',
+          'customTeacherPrompt',
+          'customLivePrompt',
+          'samplePrompts',
+          'sampleWords',
+          'updatedAt',
+          'updatedByUid'
+        ]);
+      allow delete: if false;
+    }
+
+    // Admin Users Directory (PII Isolated)
+    match /admins/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if false;
+      allow create: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidAdminUser(incoming(), userId) &&
+        isAdmin() &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isValidAdminUser(incoming(), userId) &&
+        isAdmin() &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['email', 'role', 'displayName', 'updatedAt']);
+      allow delete: if isVerifiedUser() &&
+        isValidId(userId) &&
+        isAdmin() &&
+        userId != request.auth.uid &&
+        existing().email != 'mursalimmondal630@gmail.com';
+    }
+  }
+}

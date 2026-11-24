@@ -1,0 +1,6 @@
+{
+  "name": "Wbsec - AI Teacher",
+  "description": "West Bengal Board AI Teacher with camera and photo problem solving and a structured Bengali dictionary.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

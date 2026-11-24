@@ -1,0 +1,268 @@
+{
+  "entities": {
+    "AppSettings": {
+      "title": "AppSettings",
+      "description": "Public non-PII live configuration and OTA update payload published by the Wbsec Admin.",
+      "type": "object",
+      "properties": {
+        "configVersion": {
+          "type": "integer",
+          "description": "Monotonically increasing OTA version number."
+        },
+        "updateTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Heading displayed in the student Update & Restart modal."
+        },
+        "updateNotes": {
+          "type": "string",
+          "maxLength": 600,
+          "description": "Summary of changes displayed in the Update modal."
+        },
+        "appName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "description": "Brand title shown in the app header and browser title."
+        },
+        "attributionText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "description": "Sub-branding attribution text shown next to the app name."
+        },
+        "welcomeTitle": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Optional custom welcome heading on the AI Teacher home view."
+        },
+        "welcomeSubtitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 280,
+          "description": "Subtitle shown on the AI Teacher home view."
+        },
+        "dictionaryTitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Heading for the Bengali Dictionary workspace."
+        },
+        "dictionarySubtitle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Subtitle for the Bengali Dictionary workspace."
+        },
+        "accentColor": {
+          "type": "string",
+          "enum": ["blue", "emerald", "indigo", "violet", "rose", "amber"],
+          "description": "Active accent palette token."
+        },
+        "pageBackground": {
+          "type": "string",
+          "enum": ["default", "yellow", "blue", "emerald", "rose", "violet"],
+          "description": "App background theme tint."
+        },
+        "fontScale": {
+          "type": "string",
+          "enum": ["normal", "large"],
+          "description": "Global UI typography scale."
+        },
+        "announcementBanner": {
+          "type": "string",
+          "maxLength": 240,
+          "description": "Optional announcement banner displayed across all student screens."
+        },
+        "apkDownloadUrl": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Optional HTTPS URL for direct Android APK download from the Get App button."
+        },
+        "maintenanceMode": {
+          "type": "boolean",
+          "description": "Whether student AI endpoints are paused for maintenance."
+        },
+        "maintenanceMessage": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240,
+          "description": "Message shown when maintenance mode is active."
+        },
+        "enableTeacher": {
+          "type": "boolean",
+          "description": "Toggle for AI Teacher Chat workspace."
+        },
+        "enableLiveMode": {
+          "type": "boolean",
+          "description": "Toggle for Live Voice & HD Camera Mode."
+        },
+        "enableDictionary": {
+          "type": "boolean",
+          "description": "Toggle for Bengali Dictionary workspace."
+        },
+        "enableVoiceInput": {
+          "type": "boolean",
+          "description": "Toggle for microphone voice dictation."
+        },
+        "enableVoiceOutput": {
+          "type": "boolean",
+          "description": "Toggle for TTS audio playback."
+        },
+        "enablePdfExport": {
+          "type": "boolean",
+          "description": "Toggle for study note PDF downloads."
+        },
+        "enableCamera": {
+          "type": "boolean",
+          "description": "Toggle for camera and photo attachments."
+        },
+        "defaultClass": {
+          "type": "string",
+          "enum": ["Class 5", "Class 6", "Class 7", "Class 8", "Class 9", "Class 10"],
+          "description": "Default WBBSE class selected on launch."
+        },
+        "defaultVoice": {
+          "type": "string",
+          "enum": ["Kore", "Puck", "Zephyr", "Charon", "Fenrir"],
+          "description": "Default Gemini voice persona."
+        },
+        "defaultLiveRole": {
+          "type": "string",
+          "enum": ["english", "bengali", "bilingual"],
+          "description": "Default Live Teacher language mode."
+        },
+        "temperature": {
+          "type": "number",
+          "description": "AI temperature between 0 and 1."
+        },
+        "conciseAnswers": {
+          "type": "boolean",
+          "description": "Whether AI answers default to concise steps."
+        },
+        "customTeacherPrompt": {
+          "type": "string",
+          "maxLength": 600,
+          "description": "Custom admin instructions appended to AI Teacher system prompts."
+        },
+        "customLivePrompt": {
+          "type": "string",
+          "maxLength": 600,
+          "description": "Custom admin instructions appended to Live Teacher system prompts."
+        },
+        "samplePrompts": {
+          "type": "array",
+          "description": "Up to 6 quick sample prompt buttons shown on the home view."
+        },
+        "sampleWords": {
+          "type": "array",
+          "description": "Up to 10 sample dictionary words shown in the Dictionary view."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of the last published update."
+        },
+        "updatedByUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase UID of the verified Admin who published this update."
+        }
+      },
+      "required": [
+        "configVersion",
+        "updateTitle",
+        "updateNotes",
+        "appName",
+        "attributionText",
+        "welcomeTitle",
+        "welcomeSubtitle",
+        "dictionaryTitle",
+        "dictionarySubtitle",
+        "accentColor",
+        "pageBackground",
+        "fontScale",
+        "announcementBanner",
+        "maintenanceMode",
+        "maintenanceMessage",
+        "enableTeacher",
+        "enableLiveMode",
+        "enableDictionary",
+        "enableVoiceInput",
+        "enableVoiceOutput",
+        "enablePdfExport",
+        "enableCamera",
+        "defaultClass",
+        "defaultVoice",
+        "defaultLiveRole",
+        "temperature",
+        "conciseAnswers",
+        "customTeacherPrompt",
+        "customLivePrompt",
+        "samplePrompts",
+        "sampleWords",
+        "updatedAt",
+        "updatedByUid"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized admin record storing role metadata and verified email for RBAC.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the admin."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "minLength": 3,
+          "maxLength": 254,
+          "description": "Verified admin email address."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin"],
+          "description": "Admin role identifier."
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "Optional display name."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp."
+        }
+      },
+      "required": ["uid", "email", "role", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/appSettings/{settingId}": {
+      "schema": {
+        "$ref": "#/entities/AppSettings"
+      },
+      "description": "Stores the singleton live app configuration at /appSettings/live."
+    },
+    "/admins/{userId}": {
+      "schema": {
+        "$ref": "#/entities/AdminUser"
+      },
+      "description": "Authorized admin accounts directory."
+    }
+  }
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Wbsec — অফলাইন মোড</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Bengali", Roboto, sans-serif;
+      background: radial-gradient(circle at 50% 18%, #161b3a 0%, #05060d 72%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(16, 20, 40, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.16);
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      color: #fcd34d;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 22px; margin-bottom: 8px; }
+    p { font-size: 14px; line-height: 1.6; color: #cbd5e1; margin-bottom: 18px; }
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      background: linear-gradient(135deg, #d946ef 0%, #6366f1 50%, #06b6d4 100%);
+      cursor: pointer;
+    }
+    .notes {
+      margin-top: 18px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #e2e8f0;
+    }
+    .notes strong { color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">Wbsec Standalone App · v1.5</div>
+    <h1>ইন্টারনেট সংযোগ পাওয়া যায়নি</h1>
+    <p>প্রথমবার অ্যাপটি লোড হতে একবার ইন্টারনেট দরকার। একবার লোড হয়ে গেলে আপনার অফলাইন নোটস, ডিকশনারি ও ডাউনলোড করা Offline AI প্যাক ইন্টারনেট ছাড়াই চলবে।</p>
+    <button class="btn" onclick="if(window.WbsecNative){window.WbsecNative.reloadApp();}else{location.reload();}">
+      আবার চেষ্টা করুন
+    </button>
+    <div class="notes">
+      <strong>WBBSE জরুরি সূত্র (অফলাইন):</strong><br/>
+      • (a + b)² = a² + 2ab + b²<br/>
+      • (a - b)² = a² - 2ab + b²<br/>
+      • a² - b² = (a + b)(a - b)<br/>
+      • নিউটনের ২য় সূত্র: F = m × a<br/>
+      • ওহমের সূত্র: V = I × R<br/>
+      • সালোকসংশ্লেষ: 6CO₂ + 12H₂O → C₆H₁₂O₆ + 6O₂ + 6H₂O
+    </div>
+  </div>
+</body>
+</html>
